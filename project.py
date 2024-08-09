@@ -9,22 +9,22 @@ def clear():
     pass
 def register():
     def submit():
-        print(name.get())
         if name.get()=='':
             name.configure(border_width=1,border_color='red')
         if address.get()=='':
             address.configure(border_width=1,border_color='red')
         if phone.get()=='':
             phone.configure(border_width=1,border_color='red')
-        if len(username.get())>10:
+        if 20>len(username.get()):
             username.configure(border_width=1,border_color='red')
-        if password.get()=='':
+        if len(password.get())<8 or len(password.get())>15:
             password.configure(border_width=1,border_color='red')
+            password_alert.configure(text_color='red')
         else:
             try:
                 con=pymysql.connect(host='localhost',user='root',passwd='root',database='project')
                 c=con.cursor()
-
+                print("hgvdf",password.get())
             except:
                 pass
     register_window=Toplevel()
