@@ -1,50 +1,50 @@
 from tkinter import *
 from customtkinter import *
-from PIL import Image,ImageTk
 import pymysql
 def clear():
     pass
 
 def register():
     def submit():
-        #checking for enpty field
+        #checking for empty field
         if name.get()=='':
-            name.configure(border_width=1,border_color='red')
+            name.configure( border_width=1.5,border_color='red')
         else:
-            name.configure(border_width=1,border_color='grey')
+            name.configure( border_width=1.5,border_color='grey')
         if address.get()=='':
-            address.configure(border_width=1,border_color='red')
+            address.configure( border_width=1.5,border_color='red')
         else:
-            address.configure(border_width=1,border_color='grey')
+            address.configure( border_width=1.5,border_color='grey')
         if phone.get()=='':
-            phone.configure(border_width=1,border_color='red')
+            phone.configure( border_width=1.5,border_color='red')
         else:
-            phone.configure(border_width=1,border_color='grey')
+            phone.configure( border_width=1.5,border_color='grey')
         if 20<len(username.get()) or len(username.get())<1:
-            username.configure(border_width=1,border_color='red')
+            username.configure( border_width=1.5,border_color='red')
         else:
-            username.configure(border_width=1,border_color='grey')
+            username.configure( border_width=1.5,border_color='grey')
         if len(password.get())<8 or len(password.get())>15:
-            password.configure(border_width=1,border_color='red')
+            password.configure(  border_width=1.5,border_color='red')
             password_alert.configure(text_color='red')
         else:
             try:
-                password.configure(border_width=1,border_color='grey')
+                password.configure( border_width=1.5,border_color='grey')
                 password_alert.configure(text_color='grey')
+                #saving details to data base 
                 con=pymysql.connect(host='localhost',user='root',passwd='root',database='project')
                 c=con.cursor()
-
-                sql = "insert"
+                sql = """insert into table """
             except:
                 pass
         # print(register_window.winfo_geometry())
+    def clear():
+        pass
     register_window=Toplevel()
     register_window.title("Register")
     register_window.grab_set()    #disabling root
     register_window.focus()
-    register_window.config(borderwidth=50,bg='white')
+    register_window.config(borderwidth=50,bg='violet')
     register_window.geometry("429x349+562+228")
-
     #creating lables
     name_label = CTkLabel(register_window,text="Name",anchor="e",font=('arial',15)) 
     address_label = CTkLabel(register_window,text="Address",font=('arial',15)) 
@@ -54,11 +54,11 @@ def register():
     password_alert = CTkLabel(register_window,text="password length should \nbe between 8 to 15 character")
 
     #creating entry field 
-    name = CTkEntry(register_window,font=('arial',15),border_width=1,border_color='grey',fg_color='white',corner_radius=5,width=160) 
-    address = CTkEntry(register_window,font=('arial',15),border_width=1,border_color='grey',fg_color='white',corner_radius=5,width=160) 
-    phone = CTkEntry(register_window,font=('arial',15),border_width=1,border_color='grey',fg_color='white',corner_radius=5,width=160) 
-    username = CTkEntry(register_window,font=('arial',15),border_width=1,border_color='grey',fg_color='white',corner_radius=5,width=160) 
-    password = CTkEntry(register_window,font=('arial',15),border_width=1,border_color='grey',fg_color='white',corner_radius=5,width=160) 
+    name = CTkEntry(register_window,font=('arial',15),border_width=1.5,border_color='grey',fg_color='white',corner_radius=5,width=160) 
+    address = CTkEntry(register_window,font=('arial',15), border_width=1.5,border_color='grey',fg_color='white',corner_radius=5,width=160) 
+    phone = CTkEntry(register_window,font=('arial',15), border_width=1.5,border_color='grey',fg_color='white',corner_radius=5,width=160) 
+    username = CTkEntry(register_window,font=('arial',15), border_width=1.5,border_color='grey',fg_color='white',corner_radius=5,width=160) 
+    password = CTkEntry(register_window,font=('arial',15), border_width=1.5,border_color='grey',fg_color='white',corner_radius=5,width=160) 
 
     #creating buttons
     submit_button = CTkButton(register_window,text="SUBMIT",fg_color='#636363',command=submit,corner_radius=25,hover_color='#222222',font=('arial',15))
