@@ -1,9 +1,7 @@
 from tkinter import *
 from customtkinter import *
+from tkinter import messagebox
 import pymysql
-def clear():
-    pass
-
 def register():
     def submit():
         #checking for empty field
@@ -15,7 +13,7 @@ def register():
             address.configure( border_width=1.5,border_color='red')
         else:
             address.configure( border_width=1.5,border_color='grey')
-        if phone.get()=='':
+        if len(phone.get())!=10:
             phone.configure( border_width=1.5,border_color='red')
         else:
             phone.configure( border_width=1.5,border_color='grey')
@@ -33,12 +31,31 @@ def register():
                 #saving details to data base 
                 con=pymysql.connect(host='localhost',user='root',passwd='root',database='project')
                 c=con.cursor()
-                sql = """insert into table """
-            except:
-                pass
+                sql = "insert into register values('%s','%s',%d,'%s','%s')"%(name.get(),address.get(),int(phone.get()),username.get(),password.get())
+                c.execute(sql)
+                con.commit()
+                con.close()
+                register_window.destroy()
+                messagebox.showinfo("Information","Sign-in successfull.")
+            except Exception as e:
+                a=str(e)
+                if a[-21:-3] =='register.ph_UNIQUE' :
+                    phone.configure( border_width=1.5,border_color='red')
+                    messagebox.showinfo("Information","Phonenumber already exists.")
+                elif a[-19:-3] == 'register.primary':
+                    username.configure( border_width=1.5,border_color='red')
+                    messagebox.showinfo("Information","Username already exists.")
+                else:
+                    print(a)
+                con.rollback()
+                con.close()
         # print(register_window.winfo_geometry())
     def clear():
-        pass
+        name.delete(0,END)
+        address.delete(0,END)
+        phone.delete(0,END)
+        username.delete(0,END)
+        password.delete(0,END)
     register_window=Toplevel()
     register_window.title("Register")
     register_window.grab_set()    #disabling root
