@@ -7,23 +7,28 @@ def register():
         #checking for empty field
         if name.get()=='':
             name.configure( border_width=1.5,border_color='red')
+            return
         else:
             name.configure( border_width=1.5,border_color='grey')
         if address.get()=='':
             address.configure( border_width=1.5,border_color='red')
+            return
         else:
             address.configure( border_width=1.5,border_color='grey')
         if len(phone.get())!=10:
             phone.configure( border_width=1.5,border_color='red')
+            return
         else:
             phone.configure( border_width=1.5,border_color='grey')
         if 20<len(username.get()) or len(username.get())<1:
             username.configure( border_width=1.5,border_color='red')
+            return
         else:
             username.configure( border_width=1.5,border_color='grey')
         if len(password.get())<8 or len(password.get())>15:
             password.configure(  border_width=1.5,border_color='red')
             password_alert.configure(text_color='red')
+            return
         else:
             try:
                 password.configure( border_width=1.5,border_color='grey')
@@ -31,7 +36,9 @@ def register():
                 #saving details to data base 
                 con=pymysql.connect(host='localhost',user='root',passwd='root',database='project')
                 c=con.cursor()
-                sql = "insert into register values('%s','%s',%d,'%s','%s')"%(name.get(),address.get(),int(phone.get()),username.get(),password.get())
+                sql = "insert into register(name,address,ph) values('%s','%s',%d)"%(name.get(),address.get(),int(phone.get()))
+                c.execute(sql)
+                sql="update register set username='%s',pasword='%s' where ph=%d"%(username.get(),password.get(),int(phone.get()))
                 c.execute(sql)
                 con.commit()
                 con.close()
@@ -42,20 +49,30 @@ def register():
                 if a[-21:-3] =='register.ph_UNIQUE' :
                     phone.configure( border_width=1.5,border_color='red')
                     messagebox.showinfo("Information","Phonenumber already exists.")
-                elif a[-19:-3] == 'register.primary':
+                elif a[-27:-3] == 'register.username_UNIQUE':
                     username.configure( border_width=1.5,border_color='red')
                     messagebox.showinfo("Information","Username already exists.")
                 else:
-                    print(a)
+                    print("error"+a)
                 con.rollback()
                 con.close()
         # print(register_window.winfo_geometry())
     def clear():
+        #CLEARING ALL THE FIELDS
         name.delete(0,END)
         address.delete(0,END)
         phone.delete(0,END)
         username.delete(0,END)
         password.delete(0,END)
+        #TURNING 1ST FIELD'S BORDER INTO RED AND OTHER TO GREY 
+        name.configure( border_width=1.5,border_color='red')
+        address.configure( border_width=1.5,border_color='grey')
+        phone.configure( border_width=1.5,border_color='grey')
+        username.configure( border_width=1.5,border_color='grey')
+        password.configure( border_width=1.5,border_color='grey')
+        password_alert.configure(text_color='grey')
+
+
     register_window=Toplevel()
     register_window.title("Register")
     register_window.grab_set()    #disabling root
@@ -100,7 +117,11 @@ def register():
     #--buttons--
     clear_button.grid(row=6,column=0,padx=20)
     submit_button.grid(row=6,column=1,pady=10)
+    #--buttons--
 
 
     register_window.mainloop()
 
+def CRUD():
+    messagebox.showinfo("Information","Log-in successfull.")
+    pass

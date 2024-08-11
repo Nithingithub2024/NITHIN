@@ -1,15 +1,35 @@
 from tkinter import *
 from customtkinter import *
-from PIL import ImageTk,Image
 import pymysql,PIL.Image
-from register import *
+from register_and_CRUD import *
 
-#varables
+#variables
 eye_state = 1
 
 #functions for buttons
 def submit():
-    pass
+    try:
+        #connecting to database 
+        con=pymysql.connect(host='localhost',user='root',passwd='root',database='project')
+        c=con.cursor()
+        #geting password using username
+        sql="select pasword from register where username='%s'"%(username.get())
+        c.execute(sql)
+        password_in_database = c.fetchall()[0]
+        print(password_in_database)
+        if password_in_database[0]==password.get():
+            CRUD()
+        else:
+            messagebox.showerror('Error','Wrong password')
+    except IndexError as e:
+        if str(e)=='tuple index out of range':
+            messagebox.showerror('Error','Username does not exists.')
+            username.configure(border_color='red')
+            username.focus()
+        else:
+            print(e)
+    except Exception as e:
+        messagebox.showerror('Error',e)
 
 def clear():
     pass
@@ -28,20 +48,20 @@ def eye():
 root=Tk()
 root.title("PROJECT")
 root.resizable(False,False)
-root.config(bg='lightpink')
+root.configure(bg='lightpink')
 
 #images
 img = PIL.Image.open('login.png').resize((30,30))
 login = CTkImage(img)
 img = PIL.Image.open('eyeopen.png').resize((20,20))
-eyeop = ImageTk.PhotoImage(img)
+eyeop = CTkImage(img)
 img = PIL.Image.open("eyeclose.png").resize((20,20))
-eyecl = ImageTk.PhotoImage(img)
+eyecl = CTkImage(img)
 
 #placing window in center of sreen
-sc_width = int((root.winfo_screenwidth()/2)-(190))
+sc_width = int((root.winfo_screenwidth()/2)-(185))
 sc_heigt = int((root.winfo_screenheight()/2)-(135))
-root.geometry(f"380x270+{sc_width}+{sc_heigt}")
+root.geometry(f"370x270+{sc_width}+{sc_heigt}")
 frame = CTkFrame(root)
 
 #creating labels
@@ -55,13 +75,13 @@ login_label = CTkLabel(root,text="Login",font=('arial',15))
 username = CTkEntry(root,font=('arial',15),border_width=2,corner_radius=50,border_color='blue')
 password = CTkEntry(root,font=('arial',15),border_width=2,corner_radius=50,show='*',border_color='blue')
 
-#creating buttons
-submit_button = CTkButton(root,text="SUBMIT",fg_color='white',text_color="blue",command=submit,corner_radius=5,hover_color='darkgrey',font=('arial',15),border_width=2,border_color="blue")
+#creating buttons text="SUBMIT",fg_color='white',text_color="blue",command=submit,corner_radius=5,hover_color='darkgrey',font=('arial',15),border_width=2,border_color="blue"
+submit_button = CTkButton(root,text="SUBMIT",fg_color='#636363',command=submit,corner_radius=25,hover_color='#222222',font=('arial',15))
 clear_button = CTkButton(root,text="Clear",command=clear,corner_radius=25,font=('arial',15),width=100)
 register_button = CTkButton(root,text="Register",command=register,corner_radius=25,font=('arial',15))
-eye_button = CTkButton(root,fg_color="transparent",image=eyeop,text='',width=5,hover_color='grey',command=eye)
+eye_button = CTkButton(root,fg_color="transparent",image=eyeop,text='',width=5,hover=FALSE,command=eye)
 
-#placing all items in screen 
+#placing all items in screen #FF647F #FFC0CB
 loginimg_label.grid(row=0,column=0,pady=(30,0),sticky='e')
 login_label.grid(row=0,column=1,columnspan=2,pady=(30,0),sticky='w',ipadx=5)
 username_label.grid(row=1,column=0,padx=(50,10),pady=(5,10))
