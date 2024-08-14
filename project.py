@@ -4,10 +4,11 @@ import pymysql,PIL.Image
 from register_and_CRUD import *
 
 #variables
-eye_state = 1
+eye_state = 1  
 
 #functions for buttons
 def submit():
+    # CRUD()
     try:
         #connecting to database 
         con=pymysql.connect(host='localhost',user='root',passwd='root',database='project')
@@ -16,15 +17,21 @@ def submit():
         sql="select pasword from register where username='%s'"%(username.get())
         c.execute(sql)
         password_in_database = c.fetchall()[0]
-        print(password_in_database)
+        #verifiying password
         if password_in_database[0]==password.get():
+            username.configure(border_color='blue')
+            password.configure(border_color='blue')
             CRUD()
         else:
+            username.configure(border_color='blue')
+            password.configure(border_color='red')
             messagebox.showerror('Error','Wrong password')
+            password.focus()
     except IndexError as e:
         if str(e)=='tuple index out of range':
-            messagebox.showerror('Error','Username does not exists.')
             username.configure(border_color='red')
+            password.configure(border_color='blue')
+            messagebox.showerror('Error','Username does not exists.')
             username.focus()
         else:
             print(e)
@@ -32,7 +39,9 @@ def submit():
         messagebox.showerror('Error',e)
 
 def clear():
-    pass
+    username.delete(0,END)
+    password.delete(0,END)
+    username.focus()
 def eye():
     global eye_state
     if eye_state%2!=0:
@@ -51,7 +60,7 @@ root.resizable(False,False)
 root.configure(bg='lightpink')
 
 #images
-img = PIL.Image.open('login.png').resize((30,30))
+img = PIL.Image.open('login.png')
 login = CTkImage(img)
 img = PIL.Image.open('eyeopen.png').resize((20,20))
 eyeop = CTkImage(img)
@@ -93,5 +102,8 @@ submit_button.grid(row=3,column=1,padx=(10,0),pady=(0,10))
 register_label.grid(row=4,column=0,columnspan=3,padx=(30,0),pady=(0,0))
 register_button.grid(row=5,column=0,columnspan=3,padx=(30,10),pady=(0,50))
 eye_button.grid(row=2,column=2,sticky='n')
+
+#focusing
+# username.bind('<>')
 
 root.mainloop()
