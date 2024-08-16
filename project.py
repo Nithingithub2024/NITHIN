@@ -104,6 +104,9 @@ register_button.grid(row=5,column=0,columnspan=3,padx=(30,10),pady=(0,50))
 eye_button.grid(row=2,column=2,sticky='n')
 
 #focusing
-username.bind('<Return>',lambda event: password.focus())
+username.bind('<Return>',lambda event : password.focus())
+password.bind('<Return>',submit)
+password.bind('<Up>',lambda event : username.focus())
+username.bind('<Down>',lambda event : password.focus())
 
 root.mainloop()
