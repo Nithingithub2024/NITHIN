@@ -668,17 +668,6 @@ def CRUD(userdetails):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 #variables
 eye_state = 3  
 
