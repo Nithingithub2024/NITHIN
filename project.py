@@ -441,7 +441,13 @@ def CRUD(userdetails):
                 id_entry.configure( border_width=1.5,border_color='red')
                 return
             id_entry.configure( border_width=1.5,border_color='#1a75ff')
-            ask = messagebox.askyesno('Confirmation',f'Are you sure to delete these details\nID : \nName : \n Address')
+            con=pymysql.connect(host='localhost',user='root',password='root',database='project')
+            cu=con.cursor()
+            sql="select * from student where id=%d"%(int(id_entry.get()))
+            cu.execute(sql)
+            confirmation = cu.fetchall()
+            con.close()
+            ask = messagebox.askyesno(parent=crud_window,title='Confirmation',message=f'Are you sure to delete these details\nID                       : {confirmation[0][0]}\nName                 : {confirmation[0][1]}\nAddress             : {confirmation[0][2]}\nPhone number : {confirmation[0][3]}\nImage path       : {confirmation[0][4]}')
             if ask==1:    
                 try:
                     con=pymysql.connect(host='localhost',user='root',password='root',database='project')
@@ -556,15 +562,15 @@ def CRUD(userdetails):
         person_label.configure(image=CTkImage(Image.open(vals[4]),size=(150,150)))
         id_entry.focus()
     #images
-    login = Image.open('login.png')
-    person = Image.open('person.png')
-    search_img = Image.open('search.png')
-    add = Image.open('add.png')
-    upload_img = Image.open('upload.png')
-    trash_img = Image.open('trash.png')
-    clear_img = Image.open('clear.png')
-    update_img = Image.open('update.png')
-    user = Image .open('user.png')
+    login = Image.open('images/login.png')
+    person = Image.open('images/person.png')
+    search_img = Image.open('images/search.png')
+    add = Image.open('images/add.png')
+    upload_img = Image.open('images/upload.png')
+    trash_img = Image.open('images/trash.png')
+    clear_img = Image.open('images/clear.png')
+    update_img = Image.open('images/update.png')
+    user = Image .open('images/user.png')
     #creating toplevel
     crud_window=Toplevel()
     sc_width = int((crud_window.winfo_screenwidth()/2)-(300))
@@ -731,11 +737,11 @@ root.resizable(False,False)
 root.configure(bg='lightpink')
 
 #images
-img = PIL.Image.open('login.png')
+img = PIL.Image.open('images/login.png')
 login = CTkImage(img)
-img = PIL.Image.open('eyeopen.png').resize((20,20))
+img = PIL.Image.open('images/eyeopen.png').resize((20,20))
 eyeop = CTkImage(img)
-img = PIL.Image.open("eyeclose.png").resize((20,20))
+img = PIL.Image.open("images/eyeclose.png").resize((20,20))
 eyecl = CTkImage(img)
 
 #placing window in center of sreen
